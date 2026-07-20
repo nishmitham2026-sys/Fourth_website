@@ -82,9 +82,10 @@ const Recordings = () => {
     setCurrentSongIndex(index);
     setIsPlaying(true);
     
-    // Construct streaming URL from legacy server
     const songName = selectedAlbum.songs[index];
-    const songUrl = `https://www.purandaradasa.org/${selectedAlbum.path}${encodeURIComponent(songName)}.${selectedAlbum.fileType}`;
+    const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const baseUrl = isDev ? '' : 'https://www.purandaradasa.org';
+    const songUrl = `${baseUrl}/${selectedAlbum.path}${encodeURIComponent(songName)}.${selectedAlbum.fileType}`;
     
     if (audioPlayerRef.current) {
       audioPlayerRef.current.src = songUrl;

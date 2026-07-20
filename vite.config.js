@@ -16,6 +16,11 @@ export default defineConfig({
         target: 'https://www.purandaradasa.org',
         changeOrigin: true,
         secure: false,
+      },
+      '/assets': {
+        target: 'https://www.purandaradasa.org',
+        changeOrigin: true,
+        secure: false,
       }
     }
   }
