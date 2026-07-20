@@ -83,9 +83,7 @@ const Recordings = () => {
     setIsPlaying(true);
     
     const songName = selectedAlbum.songs[index];
-    const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    const baseUrl = isDev ? '' : 'https://www.purandaradasa.org';
-    const songUrl = `${baseUrl}/${selectedAlbum.path}${encodeURIComponent(songName)}.${selectedAlbum.fileType}`;
+    const songUrl = `${selectedAlbum.path}${encodeURIComponent(songName)}.${selectedAlbum.fileType}`;
     
     if (audioPlayerRef.current) {
       audioPlayerRef.current.src = songUrl;
