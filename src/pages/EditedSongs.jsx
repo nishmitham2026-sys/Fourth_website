@@ -141,7 +141,7 @@ const EditedSongs = () => {
                         {editedSongs.map((song, idx) => (
                           <tr key={song.id || idx}>
                             <td className="text-white-50 fw-bold">{idx + 1}</td>
-                            <td className="fw-bold text-white-80 hover-gold font-sym" style={{ cursor: 'pointer' }} onClick={() => handleSelectSong(song.songTitle || song.title)}>
+                            <td className="fw-bold text-white hover-gold font-sym" style={{ cursor: 'pointer' }} onClick={() => handleSelectSong(song.songTitle || song.title)}>
                               {song.songTitle || song.title}
                             </td>
                             <td className="font-monospace text-white-50">{song.userEmail || song.email || 'N/A'}</td>

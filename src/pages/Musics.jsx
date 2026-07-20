@@ -288,7 +288,7 @@ const Musics = () => {
                         filteredMusicList.map((song, idx) => (
                           <tr key={song} onClick={() => handleSongClick(song)}>
                             <td className="text-white-50 fw-bold">{idx + 1}</td>
-                            <td className={`fw-semibold text-white-80 ${getFontClass(selectedLanguage)}`}>{song}</td>
+                            <td className={`fw-semibold text-white ${getFontClass(selectedLanguage)}`}>{song}</td>
                             <td className="text-end">
                               <span className="text-gold" style={{ color: 'var(--accent-gold)' }}>
                                 <i className="bi bi-arrow-right-circle-fill fs-5"></i>

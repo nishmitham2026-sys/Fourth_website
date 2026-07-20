@@ -212,6 +212,7 @@ p {
   padding: 14px 20px;
   border-bottom: 1px solid var(--border-color);
   background-color: transparent !important;
+  color: var(--text-white) !important;
   vertical-align: middle;
   transition: all 0.2s ease;
 }
