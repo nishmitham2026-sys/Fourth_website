@@ -4,6 +4,8 @@ import { lyricsService } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import Swal from 'sweetalert2';
 
+import { fallbackCompositions } from '../data/fallbackCompositions';
+
 const getFontClass = (language) => {
   if (language === 'English') return 'font-sym';
   if (language === 'Kannada') return 'font-kannada';
@@ -35,21 +37,30 @@ const Musics = () => {
     setLoading(true);
     try {
       const data = await lyricsService.getMusicList(lang);
-      // Ensure data is an array
-      setMusicList(Array.isArray(data) ? data : []);
+      if (Array.isArray(data) && data.length > 0) {
+        setMusicList(data);
+      } else if (fallbackCompositions[lang] && fallbackCompositions[lang].length > 0) {
+        setMusicList(fallbackCompositions[lang]);
+      } else {
+        setMusicList([]);
+      }
     } catch (err) {
-      console.error('Error fetching compositions:', err);
-      Swal.fire({
-        title: 'Error',
-        text: 'Failed to fetch compositions. Please check your network or visit the backend site to authorize the SSL certificate.',
-        icon: 'error',
-        customClass: {
-          popup: 'swal2-popup-custom',
-          title: 'swal2-title-custom',
-          confirmButton: 'swal2-confirm-custom btn btn-gold-solid px-4'
-        },
-        buttonsStyling: false
-      });
+      console.error('Error fetching compositions, using fallback:', err);
+      if (fallbackCompositions[lang] && fallbackCompositions[lang].length > 0) {
+        setMusicList(fallbackCompositions[lang]);
+      } else {
+        Swal.fire({
+          title: 'Error',
+          text: 'Failed to fetch compositions. Please check your network or visit the backend site to authorize the SSL certificate.',
+          icon: 'error',
+          customClass: {
+            popup: 'swal2-popup-custom',
+            title: 'swal2-title-custom',
+            confirmButton: 'swal2-confirm-custom btn btn-gold-solid px-4'
+          },
+          buttonsStyling: false
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -75,14 +86,19 @@ const Musics = () => {
         }
       });
     } catch (err) {
-      console.error('Error fetching lyrics:', err);
-      Swal.fire({
-        title: 'Lyrics Fetch Failed',
-        text: 'Could not load lyrics for this composition.',
-        icon: 'error',
-        customClass: {
-          popup: 'swal2-popup-custom',
-          title: 'swal2-title-custom'
+      console.error('Error fetching lyrics, opening results with prompt:', err);
+      navigate('/results', {
+        state: {
+          lyrics: {
+            title: songName,
+            language: selectedLanguage,
+            sanskrit: 'Live Sanskrit lyrics could not be loaded because the legacy backend SSL certificate is unverified in your browser.\n\nTo view live lyrics and notation, please visit https://www.purandaradasa.org once in a new tab and click "Proceed (unsafe)".',
+            lyrics: 'Live English lyrics could not be loaded because the legacy backend SSL certificate is unverified in your browser.\n\nTo view live lyrics and notation, please visit https://www.purandaradasa.org once in a new tab and click "Proceed (unsafe)".',
+            meaning: 'Visit https://www.purandaradasa.org to authorize the backend SSL certificate for live details.',
+            notation: 'Visit https://www.purandaradasa.org to authorize the backend SSL certificate.'
+          },
+          songName,
+          language: selectedLanguage
         }
       });
     } finally {
